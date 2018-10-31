@@ -1,0 +1,8 @@
+[package]
+name = "karma_dice_rust"
+version = "0.1.0"
+authors = ["Garrett Steffen <garrettsteffen@gmail.com>"]
+
+[dependencies]
+rand = "0.5.5"
+regex = "1"
