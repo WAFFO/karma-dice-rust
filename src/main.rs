@@ -14,7 +14,7 @@ fn main() {
 
     let args: Vec<String> = env::args().collect();
 
-    let dice_pattern = Regex::new(r"([1-9]?[0-9]*)d?([1-9]?[0-9]*)([\+,\-]?[1-9]?[0-9]*)").unwrap();
+    let dice_pattern = Regex::new(r"([1-9]?[0-9]*)d([1-9]?[0-9]*)((?:[\+,\-][1-9][0-9]*)?)").unwrap();
 
     if args.len() < 2 || !dice_pattern.is_match(&args[1]) {
         println!("Please write dice roll as: [number of rolls]d[dice size][+|-addition]\nFor example: 1d20+3");
