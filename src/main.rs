@@ -18,7 +18,7 @@ fn main() {
 
     if args.len() < 2 || !dice_pattern.is_match(&args[1]) {
         println!("Please write dice roll as: [number of rolls]d[dice size][+|-addition]\nFor example: 1d20+3");
-        process::exit(0);
+        process::exit(1);
     }
 
 
