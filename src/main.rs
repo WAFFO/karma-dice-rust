@@ -4,6 +4,7 @@ extern crate regex;
 use std::env;
 use std::process;
 use regex::Regex;
+use rand::Rng;
 
 fn main() {
     let mut x: u8 = 0;
@@ -35,20 +36,20 @@ fn main() {
 
     println!("number of rolls: {}\nfaces: {}\naddition: {}", rolls, faces, addition);
 
-    let x: String = handleRoll(faces, rolls, addition);
+    let x: String = handle_roll(faces, rolls, addition);
 
     println!("{}", x);
 
 }
 
-fn handleRoll(faces: u32, number_of_times: u32, addition: i32) -> String {
+fn handle_roll(faces: u32, number_of_times: u32, addition: i32) -> String {
     let mut result: String = "[ ".to_string(); // equivilant to .to_owned(), but is more clear
     let mut sum: i32 = addition;
 
-    for i in 0..number_of_times {
-        let temp: u32 = rollWithKarma(faces, 0.0);
+    for _i in 0..number_of_times {
+        let temp: u32 = roll_with_karma(faces, 0.0);
         sum += temp as i32;
-        result = format!("{}{}{}", result, temp, if i+1 < number_of_times {", "} else {" ]"});
+        result = format!("{}{}{}", result, temp, if _i+1 < number_of_times {", "} else {" ]"});
     }
     if addition > 0 {
         return format!("{} + {} = {}", result, addition, sum);
@@ -61,6 +62,27 @@ fn handleRoll(faces: u32, number_of_times: u32, addition: i32) -> String {
     }
 }
 
-fn rollWithKarma(size: u32, karma: f64) -> u32 {
-    return 10;
+fn roll_with_karma(size: u32, karma: f64) -> u32 {
+    // make distribution array
+    let d: Vec<f64> = create_distro_array(size, karma, 0.5);
+    // get a float, ranges from inclusive 0 to exclusive 1.
+    let r: f64 = rand::thread_rng().gen();
+    // find our face
+    let mut i: usize = 0;
+    while r > d[i] {
+        i += 1;
+    };
+    // affect karma
+    return (i + 1) as u32;
+}
+
+fn create_distro_array(size: u32, karma: f64, period: f32) -> Vec<f64> {
+    let mut v: Vec<f64> = Vec::new();
+
+    // TODO: make this a real karma influenced distro array (just testing other functions for now)
+    for i in 0..size {
+        v.push((i as f64 + 1.0) / (size as f64));
+    }
+
+    return v;
 }
