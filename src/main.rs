@@ -28,6 +28,39 @@ fn main() {
     let faces: u32 = if x[2].to_string() == "" { 0 } else { x[2].to_string().parse().unwrap() };
     let addition: i32 = if x[3].to_string() == "" { 0 } else { x[3].to_string().parse().unwrap() };
 
+    if faces <= 0 {
+        println!("Dice need to have at least 2 sides");
+        process::exit(1);
+    }
+
     println!("number of rolls: {}\nfaces: {}\naddition: {}", rolls, faces, addition);
 
+    let x: String = handleRoll(faces, rolls, addition);
+
+    println!("{}", x);
+
+}
+
+fn handleRoll(faces: u32, number_of_times: u32, addition: i32) -> String {
+    let mut result: String = "[ ".to_string(); // equivilant to .to_owned(), but is more clear
+    let mut sum: i32 = addition;
+
+    for i in 0..number_of_times {
+        let temp: u32 = rollWithKarma(faces, 0.0);
+        sum += temp as i32;
+        result = format!("{}{}{}", result, temp, if i+1 < number_of_times {", "} else {" ]"});
+    }
+    if addition > 0 {
+        return format!("{} + {} = {}", result, addition, sum);
+    }
+    else if addition < 0 {
+        return format!("{} - {} = {}", result, addition*-1, sum);
+    }
+    else {
+        return format!("{} = {}", result, sum);
+    }
+}
+
+fn rollWithKarma(size: u32, karma: f64) -> u32 {
+    return 10;
 }
