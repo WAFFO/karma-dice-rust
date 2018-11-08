@@ -19,19 +19,19 @@ fn main() {
 
     if args.len() < 2 || !dice_pattern.is_match(&args[1]) {
         println!("Please write dice roll as: [number of rolls]d[dice size][+|-addition]\nFor example: 1d20+3");
-        process::exit(1);
+        process::exit(0);
     }
-
 
     let x = dice_pattern.captures(&args[1]).unwrap();
 
-    let rolls: u32 = if x[1].to_string() == "" { 1 } else { x[1].to_string().parse().unwrap() };
-    let faces: u32 = if x[2].to_string() == "" { 0 } else { x[2].to_string().parse().unwrap() };
-    let addition: i32 = if x[3].to_string() == "" { 0 } else { x[3].to_string().parse().unwrap() };
+    // this is the most Rusty thing I have ever seen thus far.
+    let rolls: u32 = if let Ok(s) = x[1].to_string().parse() { s } else { 1 };
+    let faces: u32 = if let Ok(s) = x[2].to_string().parse() { s } else { 0 } ;
+    let addition: i32 = if let Ok(s) = x[3].to_string().parse() { s } else { 0 };
 
     if faces <= 0 {
         println!("Dice need to have at least 2 sides");
-        process::exit(1);
+        process::exit(0);
     }
 
     println!("number of rolls: {}\nfaces: {}\naddition: {}", rolls, faces, addition);
@@ -72,7 +72,7 @@ fn roll_with_karma(size: u32, karma: f64) -> u32 {
     while r > d[i] {
         i += 1;
     };
-    // affect karma
+    // TODO: affect karma
     return (i + 1) as u32;
 }
 
