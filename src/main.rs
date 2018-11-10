@@ -38,7 +38,7 @@ fn main() {
 
     let x: String = handle_roll(faces, rolls, addition);
 
-    println!("{}", x);
+    println!("\n{}", x);
 
 }
 
