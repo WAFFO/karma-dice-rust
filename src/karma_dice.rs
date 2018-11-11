@@ -38,12 +38,25 @@ fn roll_with_karma(size: u32, karma: f64) -> u32 {
     return (i + 1) as u32;
 }
 
-fn create_distro_array(size: u32, karma: f64, period: f32) -> Vec<f64> {
+fn create_distro_array(size: u32, karma: f64, period: f64) -> Vec<f64> {
     let mut v: Vec<f64> = Vec::new();
+    let sizef : f64 = size as f64;
+    let influence: f64 = ((karma/2.0)/(1.0+(karma/2.0).abs()))*(0.01+(1.45/(1.0+(sizef/2.4).powf(1.3))));
 
-    // TODO: make this a real karma influenced distribution array (just testing other functions for now)
-    for i in 0..size {
-        v.push((i as f64 + 1.0) / (size as f64));
+    use std::f64::consts::PI;
+    for _i in 0..size {
+        v.push((((1.0+period)*PI/(sizef-1.0))*((_i as f64)+1.0)-0.5*PI*period).cos()/2.0*influence);
+    }
+
+    let mut i : i32 = (size-2) as i32;
+    while i >= 0 {
+        v[i as usize] += v[i as usize +1];
+        i -= 1;
+    }
+
+    let big_shift: f64 = v[size as usize -1];
+    for _i in 0..size {
+        v[_i as usize] += ((1.0/sizef)*(_i as f64 +1.0)) as f64 -big_shift;
     }
 
     return v;
