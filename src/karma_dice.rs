@@ -4,24 +4,17 @@ pub fn hello() {
     println!("Hello from Karma_Dice mod!");
 }
 
-pub fn handle_roll(faces: u32, number_of_times: u32, addition: i32) -> String {
-    let mut result: String = "[ ".to_string(); // equivilant to .to_owned(), but is more clear
+pub fn handle_roll(faces: u32, number_of_times: u32, addition: i32, karma: f64) -> String {
+    let mut result: String = "{ \"rolls\": [ ".to_string(); // equivalent to .to_owned(), but is more clear
     let mut sum: i32 = addition;
 
     for _i in 0..number_of_times {
-        let temp: u32 = roll_with_karma(faces, 0.0);
+        let temp: u32 = roll_with_karma(faces, karma);
         sum += temp as i32;
         result = format!("{}{}{}", result, temp, if _i+1 < number_of_times {", "} else {" ]"});
     }
-    if addition > 0 {
-        return format!("{} + {} = {}", result, addition, sum);
-    }
-        else if addition < 0 {
-            return format!("{} - {} = {}", result, addition*-1, sum);
-        }
-            else {
-                return format!("{} = {}", result, sum);
-            }
+    // if you intended to print `}`, you can escape it using `}}`
+    return format!("{}, \"addition\": {}, \"sum\": {}, \"karma\": {} }}", result, addition, sum, 0.0);
 }
 
 fn roll_with_karma(size: u32, karma: f64) -> u32 {
@@ -48,10 +41,10 @@ fn create_distro_array(size: u32, karma: f64, period: f64) -> Vec<f64> {
         v.push((((1.0+period)*PI/(sizef-1.0))*((_i as f64)+1.0)-0.5*PI*period).cos()/2.0*influence);
     }
 
-    let mut i : i32 = (size-2) as i32;
-    while i >= 0 {
-        v[i as usize] += v[i as usize +1];
-        i -= 1;
+    let mut i : usize = (size-2) as usize;
+    loop {
+        v[i] += v[i+1];
+        if i > 0 { i -= 1; } else { break; }
     }
 
     let big_shift: f64 = v[size as usize -1];
