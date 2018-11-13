@@ -11,3 +11,8 @@ Module returns a JSON string.
 `cargo run 1d20+3 0.5`  
 `cargo run 1d12 -1.2`  
 `cargo run d100 4.34`  
+
+Example:  
+`$ ./karma_dice_rust 2d20 -0.5`  
+ ` `  
+ `{ "rolls": [ 6, 8 ], "addition": 0, "sum": 14, "karma": 0.026315789473684292 }`
