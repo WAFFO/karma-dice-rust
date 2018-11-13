@@ -35,5 +35,5 @@ fn main() {
 
     let x: String = karma_dice::handle_roll(faces, rolls, addition, karma);
 
-    println!("\n{}", x);
+    println!("{}", x);
 }
