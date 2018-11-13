@@ -4,6 +4,7 @@ pub fn hello() -> String {
     return "Hello from Karma_Dice module!".to_string();
 }
 
+/// returns (rolls: Vec<u32>, sum: i32, karma: f64)
 pub fn handle_roll(faces: u32, number_of_rolls: u32, addition: i32, karma: f64) -> (Vec<u32>, i32, f64) {
     let mut rolls: Vec<u32> = Vec::new();
     let mut sum: i32 = addition;
@@ -18,6 +19,7 @@ pub fn handle_roll(faces: u32, number_of_rolls: u32, addition: i32, karma: f64) 
     return (rolls, sum, karma);
 }
 
+/// returns JSON String
 pub fn handle_roll_string(faces: u32, number_of_rolls: u32, addition: i32, karma: f64) -> String {
     // returns (rolls: Vec<u32>, sum: i32, karma: f64)
     let result = handle_roll(faces, number_of_rolls, addition, karma);
@@ -32,6 +34,7 @@ pub fn handle_roll_string(faces: u32, number_of_rolls: u32, addition: i32, karma
     return format!("{{ \"rolls\": {}, \"addition\": {}, \"sum\": {}, \"karma\": {} }}", rolls, addition, result.1, result.2);
 }
 
+/// returns from 1 to size inclusive
 fn roll_with_karma(size: u32, karma: f64) -> u32 {
     // make distribution array
     let d: Vec<f64> = create_distro_array(size, karma, 0.5);
@@ -46,6 +49,7 @@ fn roll_with_karma(size: u32, karma: f64) -> u32 {
     return (i + 1) as u32;
 }
 
+/// returns distribution array to roll against
 fn create_distro_array(size: u32, karma: f64, period: f64) -> Vec<f64> {
     let mut v: Vec<f64> = Vec::new();
     let sizef : f64 = size as f64;
@@ -70,6 +74,7 @@ fn create_distro_array(size: u32, karma: f64, period: f64) -> Vec<f64> {
     return v;
 }
 
+/// takes in a roll from 1 to max inclusive
 fn affect_karma(max: u32, roll: u32) -> f64 {
-    return (roll as f64 / (max - 1) as f64)*-2.0 + 1.0;
+    return ((roll - 1) as f64 / (max - 1) as f64)*-2.0 + 1.0;
 }
