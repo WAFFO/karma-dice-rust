@@ -4,16 +4,16 @@ pub fn hello() -> String {
     return "Hello from Karma_Dice module!".to_string();
 }
 
-pub fn handle_roll(faces: u32, number_of_times: u32, addition: i32, karma: f64) -> String {
+pub fn handle_roll(faces: u32, number_of_rolls: u32, addition: i32, karma: f64) -> String {
     let mut result: String = "{ \"rolls\": [ ".to_string(); // equivalent to .to_owned(), but is more clear
     let mut sum: i32 = addition;
     let mut karma: f64 = karma;
 
-    for _i in 0..number_of_times {
+    for _i in 0..number_of_rolls {
         let temp: u32 = roll_with_karma(faces, karma);
         karma += affect_karma(faces, temp);
         sum += temp as i32;
-        result = format!("{}{}{}", result, temp, if _i+1 < number_of_times {", "} else {" ]"});
+        result = format!("{}{}{}", result, temp, if _i+1 < number_of_rolls {", "} else {" ]"});
     }
     // if you intended to print `}`, you can escape it using `}}`
     return format!("{}, \"addition\": {}, \"sum\": {}, \"karma\": {} }}", result, addition, sum, karma);
