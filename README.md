@@ -1,6 +1,6 @@
 # karma-dice-rust
 Command line implementation of karma-dice.  
-Module returns a JSON string.
+Module returns a JSON string or a tuple of (rolls: Vec<u32>, sum: i32, karma: f64).
 
 `[nubmer of rolls]d<faces>[+|-<constant>] [karma]`
 
