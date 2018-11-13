@@ -20,7 +20,7 @@ fn main() {
     let dice_pattern = Regex::new(r"([1-9]?[0-9]*)d([1-9]?[0-9]*)((?:[+,\-][1-9][0-9]*)?)").unwrap();
 
     if args.len() < 2 || !dice_pattern.is_match(&args[1]) {
-        println!("Please write dice roll as: [number of rolls]d<dice size>[+|-addition] [karma] \nFor example:\n1d20+3 0.5\nd100\n2d20 -1.35");
+        println!("Please write dice roll as: [number of rolls]d<faces>[+|-constant] [karma] \nFor example:\n1d20+3 0.5\nd100\n2d20 -1.35");
         process::exit(0);
     }
 

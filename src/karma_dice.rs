@@ -1,7 +1,7 @@
 use rand::Rng;
 
-pub fn hello() {
-    println!("Hello from Karma_Dice mod!");
+pub fn hello() -> String {
+    return "Hello from Karma_Dice module!".to_string();
 }
 
 pub fn handle_roll(faces: u32, number_of_times: u32, addition: i32, karma: f64) -> String {
