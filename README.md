@@ -14,5 +14,4 @@ Module returns a JSON string.
 
 Example:  
 `$ ./karma_dice_rust 2d20 -0.5`  
- ` `  
  `{ "rolls": [ 6, 8 ], "addition": 0, "sum": 14, "karma": 0.026315789473684292 }`
