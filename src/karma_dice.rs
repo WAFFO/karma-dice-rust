@@ -7,14 +7,16 @@ pub fn hello() {
 pub fn handle_roll(faces: u32, number_of_times: u32, addition: i32, karma: f64) -> String {
     let mut result: String = "{ \"rolls\": [ ".to_string(); // equivalent to .to_owned(), but is more clear
     let mut sum: i32 = addition;
+    let mut karma: f64 = karma;
 
     for _i in 0..number_of_times {
         let temp: u32 = roll_with_karma(faces, karma);
+        karma += affect_karma(faces, temp);
         sum += temp as i32;
         result = format!("{}{}{}", result, temp, if _i+1 < number_of_times {", "} else {" ]"});
     }
     // if you intended to print `}`, you can escape it using `}}`
-    return format!("{}, \"addition\": {}, \"sum\": {}, \"karma\": {} }}", result, addition, sum, 0.0);
+    return format!("{}, \"addition\": {}, \"sum\": {}, \"karma\": {} }}", result, addition, sum, karma);
 }
 
 fn roll_with_karma(size: u32, karma: f64) -> u32 {
@@ -51,6 +53,10 @@ fn create_distro_array(size: u32, karma: f64, period: f64) -> Vec<f64> {
     for _i in 0..size {
         v[_i as usize] += ((1.0/sizef)*(_i as f64 +1.0)) as f64 -big_shift;
     }
-
+//
     return v;
+}
+
+fn affect_karma(max: u32, roll: u32) -> f64 {
+    return (roll as f64 / (max - 1) as f64)*-2.0 + 1.0;
 }
