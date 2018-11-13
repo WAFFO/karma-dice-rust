@@ -9,12 +9,6 @@ extern crate karma_dice_rust;
 use karma_dice_rust::karma_dice;
 
 fn main() {
-    let mut x: u8 = 0;
-    for argument in env::args() {
-        println!("Arg [{}]: {}", x, argument);
-        x += 1;
-    }
-
     let args: Vec<String> = env::args().collect();
 
     let dice_pattern = Regex::new(r"([1-9]?[0-9]*)d([1-9]?[0-9]*)((?:[+,\-][1-9][0-9]*)?)").unwrap();
@@ -37,10 +31,9 @@ fn main() {
         process::exit(0);
     }
 
-    println!("number of rolls: {}\nfaces: {}\naddition: {}\nkarma: {}", rolls, faces, addition, karma);
+    // println!("number of rolls: {}\nfaces: {}\naddition: {}\nkarma: {}", rolls, faces, addition, karma);
 
     let x: String = karma_dice::handle_roll(faces, rolls, addition, karma);
 
     println!("\n{}", x);
-
 }
