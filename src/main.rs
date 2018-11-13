@@ -33,7 +33,7 @@ fn main() {
 
     // println!("number of rolls: {}\nfaces: {}\naddition: {}\nkarma: {}", rolls, faces, addition, karma);
 
-    let x: String = karma_dice::handle_roll(faces, rolls, addition, karma);
+    let x: String = karma_dice::handle_roll_string(faces, rolls, addition, karma);
 
     println!("{}", x);
 }

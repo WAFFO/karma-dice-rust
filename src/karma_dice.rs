@@ -4,8 +4,8 @@ pub fn hello() -> String {
     return "Hello from Karma_Dice module!".to_string();
 }
 
-pub fn handle_roll(faces: u32, number_of_rolls: u32, addition: i32, karma: f64) -> String {
-    let mut result: String = "{ \"rolls\": [ ".to_string(); // equivalent to .to_owned(), but is more clear
+pub fn handle_roll(faces: u32, number_of_rolls: u32, addition: i32, karma: f64) -> (Vec<u32>, i32, f64) {
+    let mut rolls: Vec<u32> = Vec::new();
     let mut sum: i32 = addition;
     let mut karma: f64 = karma;
 
@@ -13,10 +13,24 @@ pub fn handle_roll(faces: u32, number_of_rolls: u32, addition: i32, karma: f64) 
         let temp: u32 = roll_with_karma(faces, karma);
         karma += affect_karma(faces, temp);
         sum += temp as i32;
-        result = format!("{}{}{}", result, temp, if _i+1 < number_of_rolls {", "} else {" ]"});
+        rolls.push(temp);
+    }
+    return (rolls, sum, karma);
+}
+
+pub fn handle_roll_string(faces: u32, number_of_rolls: u32, addition: i32, karma: f64) -> String {
+
+    // returns (rolls: Vec<u32>, sum: i32, karma: f64)
+    let result = handle_roll(faces, number_of_rolls, addition, karma);
+
+    // equivalent to .to_owned(), but is more clear
+    let mut rolls: String = "[ ".to_string();
+
+    for _i in 0..result.0.len() {
+        rolls = format!("{}{}{}", rolls, result.0[_i], if _i+1 < number_of_rolls as usize {", "} else {" ]"});
     }
     // if you intended to print `}`, you can escape it using `}}`
-    return format!("{}, \"addition\": {}, \"sum\": {}, \"karma\": {} }}", result, addition, sum, karma);
+    return format!("{{ \"rolls\": {}, \"addition\": {}, \"sum\": {}, \"karma\": {} }}", rolls, addition, result.1, result.2);
 }
 
 fn roll_with_karma(size: u32, karma: f64) -> u32 {
