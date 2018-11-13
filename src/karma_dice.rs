@@ -19,7 +19,6 @@ pub fn handle_roll(faces: u32, number_of_rolls: u32, addition: i32, karma: f64) 
 }
 
 pub fn handle_roll_string(faces: u32, number_of_rolls: u32, addition: i32, karma: f64) -> String {
-
     // returns (rolls: Vec<u32>, sum: i32, karma: f64)
     let result = handle_roll(faces, number_of_rolls, addition, karma);
 
@@ -43,7 +42,7 @@ fn roll_with_karma(size: u32, karma: f64) -> u32 {
     while r > d[i] {
         i += 1;
     };
-    // TODO: affect karma
+
     return (i + 1) as u32;
 }
 
@@ -67,7 +66,7 @@ fn create_distro_array(size: u32, karma: f64, period: f64) -> Vec<f64> {
     for _i in 0..size {
         v[_i as usize] += ((1.0/sizef)*(_i as f64 +1.0)) as f64 -big_shift;
     }
-//
+
     return v;
 }
 
