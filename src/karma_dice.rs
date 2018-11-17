@@ -1,7 +1,7 @@
 use rand::Rng;
 
-pub fn hello() -> String {
-    return "Hello from Karma_Dice module!".to_string();
+pub fn hello<'a>() -> &'a  str {
+    "Hello from Karma_Dice module!"
 }
 
 /// returns (rolls: Vec<u32>, sum: i32, karma: f64)
@@ -53,11 +53,11 @@ fn roll_with_karma(size: u32, karma: f64) -> u32 {
 fn create_distro_array(size: u32, karma: f64, period: f64) -> Vec<f64> {
     let mut v: Vec<f64> = Vec::new();
     let sizef : f64 = size as f64;
-    let influence: f64 = ((karma/2.0)/(1.0+(karma/2.0).abs()))*(0.01+(1.45/(1.0+(sizef/2.4).powf(1.3))));
+    let influence: f64 = (0.5*karma*(0.01+1.45/(0.320424*sizef.powf(1.3)+1.0)))/(0.5*karma.abs()+1.0);
 
     use std::f64::consts::PI;
     for _i in 0..size {
-        v.push((((1.0+period)*PI/(sizef-1.0))*((_i as f64)+1.0)-0.5*PI*period).cos()/2.0*influence);
+        v.push((-1.5708*period+((1.0+period)*PI*(1.0+_i as f64))/(-1.0+sizef)).cos()/2.0*influence);
     }
 
     let mut i : usize = (size-2) as usize;
