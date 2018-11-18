@@ -11,7 +11,7 @@ pub fn handle_roll(faces: u32, number_of_rolls: u32, addition: i32, karma: f64) 
     let mut karma: f64 = karma;
 
     for _i in 0..number_of_rolls {
-        let temp: u32 = (single_roll(&mut karma)*(faces as f64)).ceil() as u32;
+        let temp: u32 = (karma_rng(&mut karma)*(faces as f64)).ceil() as u32;
         sum += temp as i32;
         println!("temp = {}", temp);
         rolls.push(temp);
@@ -35,7 +35,7 @@ pub fn handle_roll_string(faces: u32, number_of_rolls: u32, addition: i32, karma
 }
 
 /// mutates karma, returns a random f64 from [0, 1)
-pub fn single_roll(karma: &mut f64) -> f64 {
+pub fn karma_rng(karma: &mut f64) -> f64 {
     let influence = *karma / (1.0 + karma.abs());
     let r: f64 = rand::thread_rng().gen();
 
