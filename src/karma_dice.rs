@@ -11,9 +11,9 @@ pub fn handle_roll(faces: u32, number_of_rolls: u32, addition: i32, karma: f64) 
     let mut karma: f64 = karma;
 
     for _i in 0..number_of_rolls {
-        let temp: u32 = roll_with_karma(faces, karma);
-        karma += affect_karma(faces, temp);
+        let temp: u32 = (single_roll(&mut karma)*(faces as f64)).ceil() as u32;
         sum += temp as i32;
+        println!("temp = {}", temp);
         rolls.push(temp);
     }
     return (rolls, sum, karma);
@@ -34,47 +34,26 @@ pub fn handle_roll_string(faces: u32, number_of_rolls: u32, addition: i32, karma
     return format!("{{ \"rolls\": {}, \"addition\": {}, \"sum\": {}, \"karma\": {} }}", rolls, addition, result.1, result.2);
 }
 
-/// returns from 1 to size inclusive
-fn roll_with_karma(size: u32, karma: f64) -> u32 {
-    // make distribution array
-    let d: Vec<f64> = create_distro_array(size, karma, 0.5);
-    // get a float, ranges from inclusive 0 to exclusive 1.
+/// mutates karma, returns a random f64 from [0, 1)
+pub fn single_roll(karma: &mut f64) -> f64 {
+    let influence = *karma / (1.0 + karma.abs());
     let r: f64 = rand::thread_rng().gen();
-    // find our face
-    let mut i: usize = 0;
-    while r > d[i] {
-        i += 1;
-    };
-
-    return (i + 1) as u32;
-}
-
-/// returns distribution array to roll against
-fn create_distro_array(size: u32, karma: f64, period: f64) -> Vec<f64> {
-    let mut v: Vec<f64> = Vec::new();
-    let sizef : f64 = size as f64;
-    let influence: f64 = (0.5*karma*(0.01+1.45/(0.320424*sizef.powf(1.3)+1.0)))/(0.5*karma.abs()+1.0);
 
     use std::f64::consts::PI;
-    for _i in 0..size {
-        v.push((-1.5708*period+((1.0+period)*PI*(1.0+_i as f64))/(-1.0+sizef)).cos()/2.0*influence);
-    }
+    let result: f64 = r + if *karma >= 0.0 {
+        (1.0+(r*PI).cos())/10.0*influence
+    } else {
+        (1.0-(r*PI).cos())/10.0*influence
+    };
 
-    let mut i : usize = (size-2) as usize;
-    loop {
-        v[i] += v[i+1];
-        if i > 0 { i -= 1; } else { break; }
-    }
+    *karma += affect_karma(r);
 
-    let big_shift: f64 = v[size as usize -1];
-    for _i in 0..size {
-        v[_i as usize] += ((1.0/sizef)*(_i as f64 +1.0)) as f64 -big_shift;
-    }
+    println!("r = {}\nresult = {}",r,result);
 
-    return v;
+    result
 }
 
-/// takes in a roll from 1 to max inclusive
-fn affect_karma(max: u32, roll: u32) -> f64 {
-    return ((roll - 1) as f64 / (max - 1) as f64)*-2.0 + 1.0;
+/// takes in a float from 0 to 1
+fn affect_karma(roll: f64) -> f64 {
+    (roll as f64) * -2.0 + 1.0
 }
