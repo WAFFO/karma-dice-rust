@@ -11,7 +11,7 @@ pub fn handle_roll(faces: u32, number_of_rolls: u32, addition: i32, karma: f64) 
     let mut karma: f64 = karma;
 
     for _i in 0..number_of_rolls {
-        let temp: u32 = (karma_rng(&mut karma)*(faces as f64)).ceil() as u32;
+        let temp: u32 = (fast_karma_rng(&mut karma)*(faces as f64)).ceil() as u32;
         sum += temp as i32;
         println!("temp = {}", temp);
         rolls.push(temp);
@@ -56,4 +56,28 @@ pub fn karma_rng(karma: &mut f64) -> f64 {
 /// takes in a float from 0 to 1
 fn affect_karma(roll: f64) -> f64 {
     (roll as f64) * -2.0 + 1.0
+}
+
+/// mutates karma, returns a random f64 from [0, 1), uses an approximate formula for cos
+pub fn fast_karma_rng(karma: &mut f64) -> f64 {
+    let influence = *karma / (1.0 + karma.abs());
+    let r: f64 = rand::thread_rng().gen();
+
+    use std::f64::consts::PI;
+    let result: f64 = r + if *karma >= 0.0 {
+        (1.0+fast_sin(r*PI-PI/2.0))/10.0*influence
+    } else {
+        (1.0-fast_sin(r*PI-PI/2.0))/10.0*influence
+    };
+
+    *karma += affect_karma(r);
+
+    println!("r = {}\nresult = {}",r,result);
+
+    result
+}
+
+fn fast_sin(x: f64) -> f64 {
+    use std::f64::consts::PI;
+    (16.0 * x * (PI - x)) / (5.0 * PI.powi(2) - 4.0 * x * (PI - x))
 }
